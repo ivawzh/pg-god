@@ -13,15 +13,71 @@ Tiny library that helps create and kill PostgreSQL database.
 <!-- tocstop -->
 ## Usage
 <!-- usage -->
-```sh-session
+```sh
 $ npm install -g pg-god
-$ pg-god db-create --databaseName=pocketmon-bank
 ```
+
+Use as CLI to create/drop database. See full API at [cli-commands](#cli-commands).
+
+```sh
+$ pg-god db-create --databaseName=pocketmon-bank
+$ pg-god db-drop --databaseName=pocketmon-bank
+```
+
+## Programmatic invocation
+
+```ts
+import { createDatabase, dropDatabase } from 'pg-god'
+
+async function main() {
+  await createDatabase({ databaseName: 'pokemon-bank' })
+  await dropDatabase({ databaseName: 'pokemon-bank' })
+}
+```
+
+API
+
+```ts
+function createDatabase(newDbConfig: NewDbConfig, dbCredential?: Partial<DbCredential>): Promise<void>
+
+function dropDatabase(dropDbConfig: DropDbConfig, dbCredential?: DbCredential): Promise<void>
+
+export type NewDbConfig = {
+  databaseName: string,
+  errorIfExist?: boolean,
+}
+
+export type DropDbConfig = {
+  databaseName: string,
+  errorIfNonExist?: boolean,
+}
+
+export type DbCredential = {
+  user: string
+  database: string
+  port: number
+  host: string
+  password: string
+  connectionString?: string
+}
+
+const defaultDbCred: DbCredential = {
+  user: 'postgres',
+  database: 'postgres',
+  password: '',
+  port: 5432,
+  host: 'localhost',
+}
+```
+
+You may also use this to power TypeORM, see details at [With TypeORM](#with-typeorm).
+
 <!-- usagestop -->
 ## CLI Commands
 <!-- commands -->
 - [pg-god 😇](#pg-god-)
   - [Usage](#usage)
+  - [Programmatic invocation](#programmatic-invocation)
   - [CLI Commands](#cli-commands)
   - [`pg-god db-create`](#pg-god-db-create)
   - [`pg-god db-drop`](#pg-god-db-drop)
@@ -109,14 +165,14 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0
 ```ts
 // at index.ts
 import { createDatabase } from 'pg-god'
-import { createConnection, Connection, getConnection } from 'typeorm'
+import { createConnection, Connection, getConnection, getConnectionOptions } from 'typeorm'
 
 let conn: Connection | undefined
 
 export async function superCreateConnection(): Promise<Connection> {
   if (conn) return conn
   // may either read from ormconfig or hardcode your options here
-  const ormOpts: PostgresConnectionOptions = await getOptions()
+  const ormOpts: PostgresConnectionOptions = await getConnectionOptions()
   try {
     conn = await createConnection(ormOpts)
     return conn
