@@ -23,7 +23,7 @@ export const errorProtocol = {
   },
 }
 
-export class PgDbGodError implements Error {
+export class PgGodError implements Error {
   constructor(
     readonly name: string,
     readonly message: string,
@@ -31,8 +31,8 @@ export class PgDbGodError implements Error {
     readonly stack?: string
   ) {}
 
-  public static fromPgError(pgError: Error & { code?: string }): PgDbGodError {
-    return new PgDbGodError(
+  public static fromPgError(pgError: Error & { code?: string }): PgGodError {
+    return new PgGodError(
       // Until resolution of index issue: https://github.com/Microsoft/TypeScript/issues/14951#issuecomment-291617624
       // @ts-ignore
       errorProtocol[pgError.code]?.name || 'PDG_ERR::UnexpectedError',
@@ -43,9 +43,9 @@ export class PgDbGodError implements Error {
     )
   }
 
-  public static dbAlreadyExist(): PgDbGodError {
+  public static dbAlreadyExist(): PgGodError {
     const code = '42P04'
-    return new PgDbGodError(
+    return new PgGodError(
       errorProtocol[code].name,
       errorProtocol[code].message,
       code,
@@ -53,9 +53,9 @@ export class PgDbGodError implements Error {
     )
   }
 
-  public static dbDoesNotExist(): PgDbGodError {
+  public static dbDoesNotExist(): PgGodError {
     const code = '3D000'
-    return new PgDbGodError(
+    return new PgGodError(
       errorProtocol[code].name,
       errorProtocol[code].message,
       code,

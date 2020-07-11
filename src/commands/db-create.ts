@@ -37,7 +37,7 @@ export default class DbCreate extends Command {
     } = this.parse(DbCreate)
 
     try {
-      cli.action.start(`🦾 Start to create database '${databaseName}'`)
+      cli.action.start(`😇 Start to create database '${databaseName}'`)
 
       createDatabase(
         { databaseName, errorIfExist },

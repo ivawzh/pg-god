@@ -111,8 +111,6 @@ EXAMPLES
   $ pg-god db-create --databaseName=bank-db --password=123 --port=5433 --host=a.example.com --userName=beer
 ```
 
-_See code: [src/commands/db-create.ts](https://github.com/ivawzh/pg-god/blob/v1.0.2/src/commands/db-create.ts)_
-
 ## `pg-god db-drop`
 
 drop a database
@@ -122,7 +120,7 @@ USAGE
   $ pg-god db-drop
 
 OPTIONS
-  -e, --errorIfNonExist            [default: false] whether throw error if DB doesn't exists
+  -e, --errorIfNonExist            [default: false] whether throw error if DB doesn't exist
   -h, --help                       show CLI help
   -h, --host=host                  [default: localhost] DB host
   -i, --initialDb=initialDb        [default: postgres] Initial DB name
@@ -139,8 +137,6 @@ EXAMPLES
   $ pg-god db-drop --databaseName=bank-db --errorIfNonExist
   $ pg-god db-drop --databaseName=bank-db --password=123 --port=5433 --host=a.example.com --userName=beer
 ```
-
-_See code: [src/commands/db-drop.ts](https://github.com/ivawzh/pg-god/blob/v1.0.2/src/commands/db-drop.ts)_
 
 ## `pg-god help [COMMAND]`
 

@@ -15,7 +15,7 @@ export default class DbDrop extends Command {
   static flags = {
     help: flags.help({char: 'h'}),
     databaseName: flags.string({char: 'n', required: true, description: 'name of DB attempt to drop', env: 'DB_NAME'}),
-    errorIfNonExist: flags.boolean({char: 'e', default: false, description: "[default: false] whether throw error if DB doesn't exists", env: 'DB_ERROR_IF_NON_EXIST'}),
+    errorIfNonExist: flags.boolean({char: 'e', default: false, description: "[default: false] whether throw error if DB doesn't exist", env: 'DB_ERROR_IF_NON_EXIST'}),
     userName: flags.string({char: 'u', default: 'postgres', description: 'DB user name', env: 'DB_USERNAME'}),
     initialDb: flags.string({char: 'i', default: 'postgres', description: 'Initial DB name', env: 'DB_INITIAL'}),
     port: flags.integer({char: 'p', default: 5432, description: 'DB port, default `5432`', env: 'DB_PORT'}),
@@ -37,7 +37,7 @@ export default class DbDrop extends Command {
     } = this.parse(DbDrop)
 
     try {
-      cli.action.start(`🦾 Start to drop database '${databaseName}'`)
+      cli.action.start(`😇 Start to drop database '${databaseName}'`)
 
       dropDatabase(
         { databaseName, errorIfNonExist },

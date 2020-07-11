@@ -1,5 +1,5 @@
 import { Client } from 'pg'
-import { PgDbGodError } from './error'
+import { PgGodError } from './error'
 
 export type DbCredential = {
   user: string
@@ -43,12 +43,12 @@ export async function createDatabase(newDbConfig: NewDbConfig, dbCredential: Par
       WHERE lower(datname) = lower('${newDbConfig.databaseName}');
     `)
 
-    if (existingDb.rowCount > 0 && newDbConfig.errorIfExist) throw PgDbGodError.dbAlreadyExist()
+    if (existingDb.rowCount > 0 && newDbConfig.errorIfExist) throw PgGodError.dbAlreadyExist()
     if (existingDb.rowCount > 0 && !newDbConfig.errorIfExist) return
 
     await client.query(`CREATE DATABASE "${newDbConfig.databaseName}";`)
   } catch (error) {
-    throw PgDbGodError.fromPgError(error)
+    throw PgGodError.fromPgError(error)
   } finally {
     await client.end()
   }
@@ -78,12 +78,12 @@ export async function dropDatabase(dropDbConfig: DropDbConfig, dbCredential: DbC
       WHERE lower(datname) = lower('${dropDbConfig.databaseName}');
     `)
 
-    if (existingDb.rowCount === 0 && dropDbConfig.errorIfNonExist) throw PgDbGodError.dbDoesNotExist()
+    if (existingDb.rowCount === 0 && dropDbConfig.errorIfNonExist) throw PgGodError.dbDoesNotExist()
     if (existingDb.rowCount === 0 && !dropDbConfig.errorIfNonExist) return
 
     await client.query(`DROP DATABASE "${dropDbConfig.databaseName}";`)
   } catch (error) {
-    throw PgDbGodError.fromPgError(error)
+    throw PgGodError.fromPgError(error)
   } finally {
     await client.end()
   }
