@@ -9,34 +9,19 @@ Tiny library that helps create and kill PostgreSQL database.
 
 <!-- toc -->
 * [pg-god 😇](#pg-god-)
+* [With TypeORM](#with-typeorm)
 <!-- tocstop -->
 ## Usage
 <!-- usage -->
-```sh
-$ npm install pg-god
-$ pg-god db-create --databaseName=bank-db
-...
+```sh-session
+$ npm install -g pg-god
+$ pg-god db-create --databaseName=pocketmon-bank
 ```
-
-### Programmatically
-
-```ts
-import { createDatabase, dropDatebase } from 'pg-god'
-
-async function main() {
-  await createDatabase({ databaseName: 'pocketmon-bank' })
-  await dropDatabase({ databaseName: 'pocketmon-bank' })
-}
-```
-
-If you want to use with TypeORM checkout [With TypeORM](#with-typeorm)
-
 <!-- usagestop -->
 ## CLI Commands
 <!-- commands -->
 - [pg-god 😇](#pg-god-)
   - [Usage](#usage)
-    - [Programmatically](#programmatically)
   - [CLI Commands](#cli-commands)
   - [`pg-god db-create`](#pg-god-db-create)
   - [`pg-god db-drop`](#pg-god-db-drop)
@@ -45,11 +30,9 @@ If you want to use with TypeORM checkout [With TypeORM](#with-typeorm)
 
 ## `pg-god db-create`
 
-describe the command here
-
-```log
 create an empty database
 
+```
 USAGE
   $ pg-god db-create
 
@@ -72,11 +55,13 @@ EXAMPLES
   $ pg-god db-create --databaseName=bank-db --password=123 --port=5433 --host=a.example.com --userName=beer
 ```
 
+_See code: [src/commands/db-create.ts](https://github.com/ivawzh/pg-god/blob/v1.0.2/src/commands/db-create.ts)_
+
 ## `pg-god db-drop`
 
-```log
 drop a database
 
+```
 USAGE
   $ pg-god db-drop
 
@@ -99,25 +84,24 @@ EXAMPLES
   $ pg-god db-drop --databaseName=bank-db --password=123 --port=5433 --host=a.example.com --userName=beer
 ```
 
+_See code: [src/commands/db-drop.ts](https://github.com/ivawzh/pg-god/blob/v1.0.2/src/commands/db-drop.ts)_
+
 ## `pg-god help [COMMAND]`
 
 display help for pg-god
 
-```log
-Tiny library that helps create and kill PostgreSQL database.
-
-VERSION
-  pg-god/1.0.1 darwin-x64 node-v12.16.1
-
+```
 USAGE
-  $ pg-god [COMMAND]
+  $ pg-god help [COMMAND]
 
-COMMANDS
-  db-create  create an empty database
-  db-drop    drop a database
-  help       display help for pg-god
+ARGUMENTS
+  COMMAND  command to show help for
+
+OPTIONS
+  --all  see all commands in CLI
 ```
 
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0/src/commands/help.ts)_
 <!-- commandsstop -->
 
 # With TypeORM
