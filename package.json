@@ -1,7 +1,7 @@
 {
   "name": "pg-god",
   "description": "Tiny library that helps create and kill PostgreSQL database.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "ivan.wang @ivawzh",
   "bin": {
     "pg-god": "./bin/run"
@@ -47,10 +47,11 @@
   "repository": "ivawzh/pg-god",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest",
     "test": "echo NO TESTS",
     "build": "tsc",
-    "version": "oclif-dev readme && git add README.md"
+    "readme-gen": "oclif-dev readme",
+    "version": "git add README.md"
   },
   "types": "lib/index.d.ts"
 }
