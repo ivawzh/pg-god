@@ -20,8 +20,8 @@ $ npm install -g pg-god
 Use as CLI to create/drop database. See full API at [cli-commands](#cli-commands).
 
 ```sh
-$ pg-god db-create --databaseName=pocketmon-bank
-$ pg-god db-drop --databaseName=pocketmon-bank
+$ pg-god db-create --databaseName=pokemon-bank
+$ pg-god db-drop --databaseName=pokemon-bank
 ```
 
 ## Programmatic invocation
@@ -50,6 +50,7 @@ export type NewDbConfig = {
 export type DropDbConfig = {
   databaseName: string,
   errorIfNonExist?: boolean,
+  dropConnections?: boolean,
 }
 
 export type DbCredential = {
@@ -121,6 +122,7 @@ USAGE
 
 OPTIONS
   -e, --errorIfNonExist            [default: false] whether throw error if DB doesn't exist
+  -d, --dropConnections            [default: true] whether automatically drop DB connections
   -h, --help                       show CLI help
   -h, --host=host                  [default: localhost] DB host
   -i, --initialDb=initialDb        [default: postgres] Initial DB name
@@ -134,7 +136,7 @@ ALIASES
 
 EXAMPLES
   $ pg-god db-drop --databaseName=bank-db
-  $ pg-god db-drop --databaseName=bank-db --errorIfNonExist
+  $ pg-god db-drop --databaseName=bank-db --errorIfNonExist --no-dropConnections
   $ pg-god db-drop --databaseName=bank-db --password=123 --port=5433 --host=a.example.com --userName=beer
 ```
 
