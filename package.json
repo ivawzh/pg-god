@@ -1,7 +1,7 @@
 {
   "name": "pg-god",
   "description": "Tiny library that helps create and kill PostgreSQL database.",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "ivan.wang @ivawzh",
   "bin": {
     "pg-god": "./bin/run"

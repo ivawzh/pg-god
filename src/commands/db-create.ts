@@ -36,23 +36,19 @@ export default class DbCreate extends Command {
       }
     } = this.parse(DbCreate)
 
-    try {
-      cli.action.start(`😇 Start to create database '${databaseName}'`)
+    cli.action.start(`😇 Start to create database '${databaseName}'`)
 
-      createDatabase(
-        { databaseName, errorIfExist },
-        {
-          user: userName,
-          database: initialDb,
-          port: port,
-          host: host,
-          password: password,
-        }
-      )
+    await createDatabase(
+      { databaseName, errorIfExist },
+      {
+        user: userName,
+        database: initialDb,
+        port: port,
+        host: host,
+        password: password,
+      }
+    )
 
-      cli.action.stop()
-    } catch (error) {
-      console.error(error)
-    }
+    cli.action.stop()
   }
 }

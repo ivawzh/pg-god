@@ -57,10 +57,12 @@ export async function createDatabase(newDbConfig: NewDbConfig, dbCredential: Par
 export type DropDbConfig = {
   databaseName: string,
   errorIfNonExist?: boolean,
+  dropConnections?: boolean,
 }
 /**
- * @param dropDbConfig Requires a `databaseName` you are trying to drop. `errorIfNonExist` is default to false. When `errorIfNonExist` is `true`,
- * it will throw error when database doesn't exist before executing drop.
+ * @param dropDbConfig.databaseName Requires a `databaseName` you are trying to drop.
+ * @param dropDbConfig.errorIfNonExist is default to false. When `errorIfNonExist` is `true`, it will throw error when database doesn't exist before executing drop.
+ * @param dropDbConfig.dropConnections is default to true. When `dropConnections` is `true`, it will automatically drop all current connections to the database.
  * @param dbCredential Default to localhost:5432 `postgres` database and `postgres` user with empty password.
  * @throws `PgDbGodError` More details at `errorProtocol`.
  *
@@ -81,10 +83,24 @@ export async function dropDatabase(dropDbConfig: DropDbConfig, dbCredential: DbC
     if (existingDb.rowCount === 0 && dropDbConfig.errorIfNonExist) throw PgGodError.dbDoesNotExist()
     if (existingDb.rowCount === 0 && !dropDbConfig.errorIfNonExist) return
 
+    if (dropDbConfig.dropConnections !== false) await dropDbConnections(client, dropDbConfig.databaseName)
+
     await client.query(`DROP DATABASE "${dropDbConfig.databaseName}";`)
   } catch (error) {
     throw PgGodError.fromPgError(error)
   } finally {
     await client.end()
   }
+}
+
+async function dropDbConnections(client: Client, dbName: string) {
+  return client.query(`
+    SELECT
+      pg_terminate_backend(pg_stat_activity.pid)
+    FROM
+      pg_stat_activity
+    WHERE
+      pg_stat_activity.datname = '${dbName}'
+      AND pid <> pg_backend_pid();
+  `)
 }
