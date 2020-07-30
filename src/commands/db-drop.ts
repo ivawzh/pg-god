@@ -38,7 +38,7 @@ export default class DbDrop extends Command {
       }
     } = this.parse(DbDrop)
 
-    cli.action.start(`😇 Start to drop database '${databaseName}'`)
+    cli.action.start(`😇 Drop database '${databaseName}'`)
 
     await dropDatabase(
       {
