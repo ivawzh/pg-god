@@ -1,6 +1,6 @@
 # pg-god 😇
 
-Tiny library that helps create and kill PostgreSQL database.
+A tiny library that helps you create or kill PostgreSQL database.
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/pg-god.svg)](https://npmjs.org/package/pg-god)
