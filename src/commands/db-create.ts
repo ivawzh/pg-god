@@ -44,7 +44,7 @@ export default class DbCreate extends Command {
       }
     } = this.parse(DbCreate)
     const urlParams = dbUrl ? parsePostgresUrl(dbUrl) : {}
-    const finalParams = merge(urlParams, flags)
+    const finalParams = merge(flags, urlParams)
     const {
       databaseName,
       userName,

@@ -47,7 +47,7 @@ export default class DbDrop extends Command {
     } = this.parse(DbDrop)
 
     const urlParams = dbUrl ? parsePostgresUrl(dbUrl) : {}
-    const finalParams = merge(urlParams, flags)
+    const finalParams = merge(flags, urlParams)
     const {
       databaseName,
       userName,
