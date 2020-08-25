@@ -1,6 +1,7 @@
 import {Command, flags} from '@oclif/command'
-import { createDatabase, parseDbUrl, merge } from '../god-stuff'
+import { createDatabase } from '../god-stuff'
 import cli from 'cli-ux'
+import { parsePostgresUrl, merge } from '../utils'
 
 export default class DbCreate extends Command {
   static aliases = ['db:create']
@@ -42,7 +43,7 @@ export default class DbCreate extends Command {
         ...flags
       }
     } = this.parse(DbCreate)
-    const urlParams = parseDbUrl(dbUrl)
+    const urlParams = dbUrl ? parsePostgresUrl(dbUrl) : {}
     const finalParams = merge(urlParams, flags)
     const {
       databaseName,

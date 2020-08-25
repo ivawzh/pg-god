@@ -1,6 +1,7 @@
 import {Command, flags} from '@oclif/command'
-import { dropDatabase, parseDbUrl, merge } from '../god-stuff'
+import { dropDatabase } from '../god-stuff'
 import cli from 'cli-ux'
+import { parsePostgresUrl, merge } from '../utils'
 
 export default class DbDrop extends Command {
   static aliases = ['db:drop']
@@ -45,7 +46,7 @@ export default class DbDrop extends Command {
       }
     } = this.parse(DbDrop)
 
-    const urlParams = parseDbUrl(dbUrl)
+    const urlParams = dbUrl ? parsePostgresUrl(dbUrl) : {}
     const finalParams = merge(urlParams, flags)
     const {
       databaseName,
