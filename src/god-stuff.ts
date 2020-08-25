@@ -1,5 +1,6 @@
 import { Client } from 'pg'
 import { PgGodError } from './error'
+import * as url from 'url'
 
 export type DbCredential = {
   user: string
@@ -7,7 +8,6 @@ export type DbCredential = {
   port: number
   host: string
   password: string
-  connectionString?: string
 }
 
 const defaultDbCred: DbCredential = {
@@ -31,12 +31,10 @@ export type NewDbConfig = {
  *
  * @example createDatabase({ databaseName: 'bank-development' })
  */
-export async function createDatabase(newDbConfig: NewDbConfig, dbCredential: Partial<DbCredential>=defaultDbCred) {
-  const cred = { ...defaultDbCred, ...dbCredential }
-  const client = new Client(cred.connectionString ? { connectionString: cred.connectionString } : cred)
+export async function createDatabase(newDbConfig: NewDbConfig, dbCredential:Partial<DbCredential>=defaultDbCred) {
+  const client = new Client({ ...defaultDbCred, ...dbCredential })
   try {
-    client.connect()
-
+    await client.connect()
     const existingDb = await client.query(`
       SELECT datname
       FROM pg_catalog.pg_database
@@ -68,12 +66,10 @@ export type DropDbConfig = {
  *
  * @example dropDatabase({ databaseName: 'bank-development' })
  */
-export async function dropDatabase(dropDbConfig: DropDbConfig, dbCredential: DbCredential=defaultDbCred) {
-  const cred = { ...defaultDbCred, ...dbCredential }
-  const client = new Client(cred.connectionString ? { connectionString: cred.connectionString } : cred)
+export async function dropDatabase(dropDbConfig: DropDbConfig, dbCredential: Partial<DbCredential>=defaultDbCred) {
+  const client = new Client({ ...defaultDbCred, ...dbCredential })
   try {
-    client.connect()
-
+    await client.connect()
     const existingDb = await client.query(`
       SELECT datname
       FROM pg_catalog.pg_database
@@ -83,7 +79,7 @@ export async function dropDatabase(dropDbConfig: DropDbConfig, dbCredential: DbC
     if (existingDb.rowCount === 0 && dropDbConfig.errorIfNonExist) throw PgGodError.dbDoesNotExist()
     if (existingDb.rowCount === 0 && !dropDbConfig.errorIfNonExist) return
 
-    if (dropDbConfig.dropConnections !== false) await dropDbConnections(client, dropDbConfig.databaseName)
+    if (dropDbConfig.dropConnections !== false) await dropDbOtherUserConnections(client, dropDbConfig.databaseName)
 
     await client.query(`DROP DATABASE "${dropDbConfig.databaseName}";`)
   } catch (error) {
@@ -93,7 +89,7 @@ export async function dropDatabase(dropDbConfig: DropDbConfig, dbCredential: DbC
   }
 }
 
-async function dropDbConnections(client: Client, dbName: string) {
+async function dropDbOtherUserConnections(client: Client, dbName: string) {
   return client.query(`
     SELECT
       pg_terminate_backend(pg_stat_activity.pid)
@@ -103,4 +99,29 @@ async function dropDbConnections(client: Client, dbName: string) {
       pg_stat_activity.datname = '${dbName}'
       AND pid <> pg_backend_pid();
   `)
+}
+
+export function parseDbUrl(dbUrl: string | undefined) {
+  if (!dbUrl) return {}
+  const urlQuery = url.parse(dbUrl)
+  return {
+    scheme: urlQuery.protocol?.substr(0, urlQuery.protocol?.length - 1),
+    userName: urlQuery.auth?.substr(0, urlQuery.auth?.indexOf(':')),
+    password: urlQuery.auth?.substr(urlQuery.auth?.indexOf(':') + 1, urlQuery.auth?.length),
+    host: urlQuery.hostname,
+    port: urlQuery.port,
+    databaseName: urlQuery.path?.slice(1),
+  }
+}
+
+/**
+ * Shallow merge objects without overriding fields with `undefined`.
+ * TODO: return better types
+ */
+export function merge(target: object, ...sources: object[]) {
+  return Object.assign({}, target, ...sources.map(x =>
+    Object.entries(x)
+      .filter(([key, value]) => value !== undefined)
+      .reduce((obj, [key, value]) => (obj[key] = value, obj), {} as Record<string, undefined>)
+  ))
 }

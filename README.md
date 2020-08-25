@@ -40,7 +40,7 @@ API
 ```ts
 function createDatabase(newDbConfig: NewDbConfig, dbCredential?: Partial<DbCredential>): Promise<void>
 
-function dropDatabase(dropDbConfig: DropDbConfig, dbCredential?: DbCredential): Promise<void>
+function dropDatabase(dropDbConfig: DropDbConfig, dbCredential?: Partial<DbCredential>): Promise<void>
 
 export type NewDbConfig = {
   databaseName: string,
@@ -59,7 +59,6 @@ export type DbCredential = {
   port: number
   host: string
   password: string
-  connectionString?: string
 }
 
 const defaultDbCred: DbCredential = {
@@ -96,9 +95,10 @@ USAGE
 OPTIONS
   -e, --errorIfExist               [default: false] whether throw error if DB already exists
   -h, --help                       show CLI help
-  -h, --host=host                  [default: localhost] DB host
+  -o, --host=host                  [default: localhost] DB host
   -i, --initialDb=initialDb        [default: postgres] Initial DB name
-  -n, --databaseName=databaseName  (required) new DB name
+  -n, --databaseName=databaseName  new DB name
+  -l, --url=url                    new DB URL
   -p, --port=port                  [default: 5432] DB port, default `5432`
   -u, --userName=userName          [default: postgres] DB user name
   -w, --password=password          [default: empty] DB password
@@ -108,6 +108,7 @@ ALIASES
 
 EXAMPLES
   $ pg-god db-create --databaseName=bank-db
+  $ pg-god db-create --url postgresql://localhost:5432/bank-db
   $ pg-god db-create --databaseName=bank-db --errorIfExist
   $ pg-god db-create --databaseName=bank-db --password=123 --port=5433 --host=a.example.com --userName=beer
 ```
@@ -124,9 +125,10 @@ OPTIONS
   -e, --errorIfNonExist            [default: false] whether throw error if DB doesn't exist
   -d, --dropConnections            [default: true] whether automatically drop DB connections
   -h, --help                       show CLI help
-  -h, --host=host                  [default: localhost] DB host
+  -o, --host=host                  [default: localhost] DB host
   -i, --initialDb=initialDb        [default: postgres] Initial DB name
-  -n, --databaseName=databaseName  (required) name of DB attempt to drop
+  -n, --databaseName=databaseName  name of DB that will be dropped
+  -l, --url=url                    URL of DB that will be dropped
   -p, --port=port                  [default: 5432] DB port, default `5432`
   -u, --userName=userName          [default: postgres] DB user name
   -w, --password=password          [default: empty] DB password
@@ -136,6 +138,7 @@ ALIASES
 
 EXAMPLES
   $ pg-god db-drop --databaseName=bank-db
+  $ pg-god db-drop --url postgresql://localhost:5432/bank-db
   $ pg-god db-drop --databaseName=bank-db --errorIfNonExist --no-dropConnections
   $ pg-god db-drop --databaseName=bank-db --password=123 --port=5433 --host=a.example.com --userName=beer
 ```
