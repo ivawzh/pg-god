@@ -8,6 +8,7 @@ export default class DbDrop extends Command {
 
   static examples = [
     `$ pg-god db-drop --databaseName=bank-db`,
+    `$ DB_NAME=bank-db pg-god db-drop`,
     `$ pg-god db-drop --url postgresql://localhost:5432/bank-db`,
     `$ pg-god db-drop --databaseName=bank-db --errorIfNonExist --no-dropConnections`,
     `$ pg-god db-drop --databaseName=bank-db --password=123 --port=5433 --host=a.example.com --userName=beer`,
@@ -16,7 +17,7 @@ export default class DbDrop extends Command {
   static flags = {
     help: flags.help({char: 'h'}),
     errorIfNonExist: flags.boolean({char: 'e', default: false, description: "[default: false] whether throw error if DB doesn't exist", env: 'DB_ERROR_IF_NON_EXIST'}),
-    dropConnections: flags.boolean({char: 'd', default: true, allowNo: true, description: "[default: true] whether automatically drop DB connections"}),
+    dropConnections: flags.boolean({char: 'd', default: true, allowNo: true, description: "[default: true] whether automatically drop DB connections", env: 'DROP_CONNECTIONS'}),
     initialDb: flags.string({char: 'i', default: 'postgres', description: 'Initial DB name', env: 'DB_INITIAL'}),
     databaseName: flags.string({char: 'n', description: 'name of DB that will be dropped', env: 'DB_NAME', exclusive: ['url']}),
     userName: flags.string({char: 'u', default: 'postgres', description: 'DB user name', env: 'DB_USERNAME', exclusive: ['url']}),

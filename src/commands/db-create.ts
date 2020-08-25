@@ -8,6 +8,7 @@ export default class DbCreate extends Command {
 
   static examples = [
     `$ pg-god db-create --databaseName=bank-db`,
+    `$ DB_NAME=bank-db pg-god db-create`,
     `$ pg-god db-create --url postgresql://localhost:5432/bank-db`,
     `$ pg-god db-create --databaseName=bank-db --errorIfExist`,
     `$ pg-god db-create --databaseName=bank-db --password=123 --port=5433 --host=a.example.com --userName=beer`,

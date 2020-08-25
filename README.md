@@ -106,8 +106,19 @@ OPTIONS
 ALIASES
   $ pg-god db:create
 
+ALTERNATIVE_ENV
+  DB_ERROR_IF_EXIST=errorIfExist
+  DB_INITIAL=initialDb
+  DB_NAME=databaseName
+  DB_USERNAME=userName
+  DB_PORT=port
+  DB_HOST=host
+  DB_PASSWORD=password
+  DB_URL=url
+
 EXAMPLES
   $ pg-god db-create --databaseName=bank-db
+  $ DB_NAME=bank-db pg-god db-create
   $ pg-god db-create --url postgresql://localhost:5432/bank-db
   $ pg-god db-create --databaseName=bank-db --errorIfExist
   $ pg-god db-create --databaseName=bank-db --password=123 --port=5433 --host=a.example.com --userName=beer
@@ -136,8 +147,20 @@ OPTIONS
 ALIASES
   $ pg-god db:drop
 
+ALTERNATIVES
+  DB_ERROR_IF_NON_EXIST=errorIfNonExist
+  DROP_CONNECTIONS=dropConnections
+  DB_INITIAL=initialDb
+  DB_NAME=databaseName
+  DB_USERNAME=userName
+  DB_PORT=port
+  DB_HOST=host
+  DB_PASSWORD=password
+  DB_URL=url
+
 EXAMPLES
   $ pg-god db-drop --databaseName=bank-db
+  $ DB_NAME=bank-db pg-god db-drop
   $ pg-god db-drop --url postgresql://localhost:5432/bank-db
   $ pg-god db-drop --databaseName=bank-db --errorIfNonExist --no-dropConnections
   $ pg-god db-drop --databaseName=bank-db --password=123 --port=5433 --host=a.example.com --userName=beer
